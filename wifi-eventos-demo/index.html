@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0E1A2B">
+<title>WiFi del evento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fondo:#0E1A2B; --superficie:#16263D; --borde:#2A3D59; --borde-punteado:#3A5274;
+    --texto:#E8EEF6; --texto-2:#C3CEDD; --tenue:#9FB0C6; --acento:#C6F432; --sobre-acento:#0E1A2B; --aviso:#FFB020;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#070E18;color:var(--texto);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .demo-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;padding:12px 16px;font-size:13px;color:var(--tenue)}
+  .demo-bar button{font:inherit;color:var(--texto-2);background:transparent;border:1px solid var(--borde);border-radius:999px;padding:8px 14px;min-height:36px;cursor:pointer}
+  .demo-bar button[aria-pressed="true"]{background:var(--acento);color:var(--sobre-acento);border-color:var(--acento);font-weight:600}
+  .phone{width:100%;max-width:390px;min-height:844px;margin:0 auto 32px;background:var(--fondo);display:flex;flex-direction:column;overflow:hidden;border-radius:28px;box-shadow:0 0 0 1px #1f2f47}
+  @media (max-width:480px){.phone{border-radius:0;box-shadow:none;min-height:calc(100dvh - 60px);margin-bottom:0}}
+  .screen{display:none;flex:1;flex-direction:column;gap:20px;padding:28px 0 24px}
+  .screen.active{display:flex}
+  .pad{padding:0 24px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;letter-spacing:.04em;color:var(--acento)}
+  .chip{font-size:13px;color:var(--tenue);border:1px solid var(--borde);border-radius:999px;padding:6px 12px}
+  .hero{width:100%;height:250px;object-fit:cover;display:block}
+  h1{margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;line-height:1.1}
+  .h1-sm{font-size:30px}
+  p{margin:0}
+  .lead{font-size:16px;line-height:1.5;color:var(--texto-2)}
+  .accept{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--texto-2)}
+  .accept input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--acento);flex-shrink:0}
+  .link{background:none;border:none;padding:0;font:inherit;color:var(--acento);text-decoration:underline;cursor:pointer}
+  .terms{margin:0 24px;background:var(--superficie);border-radius:14px;padding:16px;font-size:13px;line-height:1.5;color:var(--texto-2);max-height:140px;overflow-y:auto}
+  .bottom{margin-top:auto;display:flex;flex-direction:column;gap:12px}
+  .btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:16px;border:none;width:100%;background:var(--acento);color:var(--sobre-acento);font:600 17px Inter,sans-serif;text-decoration:none;cursor:pointer}
+  .btn:disabled{background:var(--borde);color:#8A9BB2;cursor:not-allowed}
+  .foot{font-size:12px;color:var(--tenue);text-align:center}
+  .center{display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:24px;text-align:center}
+  .icon{width:72px;height:72px;border-radius:999px;display:flex;align-items:center;justify-content:center}
+  .card{background:var(--superficie);border-radius:20px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .label{font-size:13px;color:var(--tenue);text-transform:uppercase;letter-spacing:.08em}
+  .timer{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:56px;font-variant-numeric:tabular-nums}
+  .promo{border:1px dashed var(--borde-punteado);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:8px}
+  .promo .label{color:var(--acento);font-weight:600}
+  .placeholder{height:220px;border-radius:20px;background:var(--superficie);border:1px dashed var(--borde-punteado);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-size:14px;color:var(--tenue)}
+</style>
+</head>
+<body>
+<nav class="demo-bar" aria-label="Pantallas de la demo">
+  <span>Demo:</span>
+  <button type="button" data-go="bienvenida" aria-pressed="true">Bienvenida</button>
+  <button type="button" data-go="conectado" aria-pressed="false">Conectado</button>
+  <button type="button" data-go="lleno" aria-pressed="false">Red llena</button>
+</nav>
+
+<main class="phone">
+  <!-- 1. Bienvenida -->
+  <section class="screen active" id="bienvenida" aria-label="Bienvenida">
+    <div class="header pad"><span class="logo">LOGO</span><span class="chip">Nombre de evento</span></div>
+    <img class="hero" src="hero.webp" alt="Personas disfrutando un festival al aire libre">
+    <div class="pad" style="display:flex;flex-direction:column;gap:10px">
+      <h1>WiFi gratis, cortesía de [MARCA]</h1>
+      <p class="lead">Navega hasta 15 minutos por sesión. Cuando se termine, puedes volver a entrar.</p>
+    </div>
+    <div class="accept pad">
+      <input id="acepto" type="checkbox">
+      <p><label for="acepto">Acepto los </label><button type="button" class="link" id="verTerminos" aria-expanded="false" aria-controls="terminos">términos y condiciones</button><label for="acepto"> de uso de la red.</label></p>
+    </div>
+    <div class="terms" id="terminos" hidden>Servicio gratuito, por un máximo de 15 minutos por sesión y con velocidad limitada. La red tiene cupos: si está llena, espera unos minutos. Es una red pública: evita ingresar datos sensibles. Operado por [PROVEEDOR].</div>
+    <div class="bottom pad">
+      <button type="button" class="btn" id="conectar" disabled>Acepta los términos para conectarte</button>
+      <span class="foot">Operado por [PROVEEDOR]</span>
+    </div>
+  </section>
+
+  <!-- 2. Conectado -->
+  <section class="screen" id="conectado" aria-label="Conectado" style="gap:24px">
+    <div class="header pad"><span class="logo">LOGO</span><span class="chip">Nombre de evento</span></div>
+    <div class="center pad">
+      <div class="icon" style="background:var(--acento)"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0E1A2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h1 class="h1-sm">Ya estás conectado</h1>
+      <p style="font-size:15px;line-height:1.5;color:var(--texto-2)">Disfruta el evento. Tu sesión se cierra sola al terminar el tiempo.</p>
+    </div>
+    <div class="pad"><div class="card"><span class="label">Tiempo restante</span><span class="timer" id="timer" aria-live="off">15:00</span></div></div>
+    <div class="pad"><div class="promo"><span class="label">Solo para conectados</span><p style="font-size:16px;line-height:1.5">Muestra este código en el stand de [MARCA]: [CÓDIGO DE PROMOCIÓN]</p></div></div>
+    <div class="bottom pad">
+      <a class="btn" href="#" id="navegar">Empezar a navegar</a>
+      <span class="foot">Operado por [PROVEEDOR]</span>
+    </div>
+  </section>
+
+  <!-- 3. Red llena -->
+  <section class="screen" id="lleno" aria-label="Red llena" style="gap:24px">
+    <div class="header pad"><span class="logo">LOGO</span><span class="chip">Nombre de evento</span></div>
+    <div class="center pad">
+      <div class="icon" style="background:var(--superficie);border:2px solid var(--aviso)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFB020" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div>
+      <h1 class="h1-sm">Red llena por ahora</h1>
+      <p style="font-size:15px;line-height:1.5;color:var(--texto-2)">Todos los cupos están en uso. Se liberan cada pocos minutos: vuelve a intentar en un rato.</p>
+    </div>
+    <div class="pad"><div class="placeholder">[Contenido de la marca mientras espera: video, promoción o mapa del evento]</div></div>
+    <div class="bottom pad">
+      <button type="button" class="btn" data-go="bienvenida">Intentar de nuevo</button>
+      <span class="foot">Operado por [PROVEEDOR]</span>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var timerEl = document.getElementById('timer');
+  var interval = null;
+  function startTimer(){
+    var s = 900;
+    clearInterval(interval);
+    timerEl.textContent = '15:00';
+    interval = setInterval(function(){
+      s = s > 0 ? s - 1 : 0;
+      timerEl.textContent = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    }, 1000);
+  }
+  function go(id){
+    document.querySelectorAll('.screen').forEach(function(el){ el.classList.toggle('active', el.id === id); });
+    document.querySelectorAll('.demo-bar [data-go]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.go === id)); });
+    if (id === 'conectado') startTimer(); else clearInterval(interval);
+    window.scrollTo(0,0);
+  }
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click', function(){ go(b.dataset.go); }); });
+  var acepto = document.getElementById('acepto');
+  var conectar = document.getElementById('conectar');
+  acepto.addEventListener('change', function(){
+    conectar.disabled = !acepto.checked;
+    conectar.textContent = acepto.checked ? 'Conectarme' : 'Acepta los términos para conectarte';
+  });
+  conectar.addEventListener('click', function(){ go('conectado'); });
+  var ver = document.getElementById('verTerminos');
+  var terminos = document.getElementById('terminos');
+  ver.addEventListener('click', function(){
+    var open = terminos.hidden;
+    terminos.hidden = !open;
+    ver.setAttribute('aria-expanded', String(open));
+  });
+  document.getElementById('navegar').addEventListener('click', function(e){ e.preventDefault(); });
+})();
+</script>
+</body>
+</html>
