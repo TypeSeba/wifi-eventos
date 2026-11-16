@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0E1A2B">
+<title>WiFi del evento · Inicio de sesión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fondo:#0E1A2B; --superficie:#16263D; --borde:#2A3D59; --borde-punteado:#3A5274;
+    --texto:#E8EEF6; --texto-2:#C3CEDD; --tenue:#9FB0C6; --acento:#C6F432; --sobre-acento:#0E1A2B; --aviso:#FFB020; --error:#FF8A8A;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#070E18;color:var(--texto);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .demo-bar{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;padding:12px 16px;font-size:13px;color:var(--tenue)}
+  .demo-bar button{font:inherit;color:var(--texto-2);background:transparent;border:1px solid var(--borde);border-radius:999px;padding:8px 14px;min-height:36px;cursor:pointer}
+  .demo-bar button[aria-pressed="true"]{background:var(--acento);color:var(--sobre-acento);border-color:var(--acento);font-weight:600}
+  .demo-note{width:100%;text-align:center;font-size:12px;color:var(--tenue)}
+  .phone{width:100%;max-width:390px;min-height:844px;margin:0 auto 32px;background:var(--fondo);display:flex;flex-direction:column;overflow:hidden;border-radius:28px;box-shadow:0 0 0 1px #1f2f47}
+  @media (max-width:480px){.phone{border-radius:0;box-shadow:none;min-height:calc(100dvh - 90px);margin-bottom:0}}
+  .screen{display:none;flex:1;flex-direction:column;gap:20px;padding:28px 0 24px}
+  .screen.active{display:flex}
+  .pad{padding:0 24px}
+  .header{display:flex;justify-content:space-between;align-items:center}
+  .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;letter-spacing:.04em;color:var(--acento)}
+  .chip{font-size:13px;color:var(--tenue);border:1px solid var(--borde);border-radius:999px;padding:6px 12px}
+  .hero{width:100%;height:170px;object-fit:cover;display:block}
+  h1{margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:32px;line-height:1.1}
+  .h1-sm{font-size:30px}
+  p{margin:0}
+  .lead{font-size:16px;line-height:1.5;color:var(--texto-2)}
+  :focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+  .form{display:flex;flex-direction:column;gap:16px;flex:1}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:14px;font-weight:500;color:var(--texto-2)}
+  .input-wrap{position:relative}
+  .input{width:100%;height:52px;border-radius:14px;border:1px solid var(--borde);background:var(--superficie);color:var(--texto);font:400 16px Inter,sans-serif;padding:0 16px}
+  .input::placeholder{color:#7C8FA8}
+  .input[aria-invalid="true"]{border-color:var(--error)}
+  .input.has-toggle{padding-right:84px}
+  .toggle{position:absolute;right:6px;top:6px;height:40px;padding:0 12px;background:transparent;border:none;border-radius:10px;color:var(--acento);font:500 14px Inter,sans-serif;cursor:pointer}
+  .error{min-height:0;font-size:13px;line-height:1.4;color:var(--error)}
+  .error:empty{display:none}
+  .hint{font-size:12px;color:var(--tenue)}
+  .accept{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;color:var(--texto-2)}
+  .accept input{width:22px;height:22px;margin:2px 0 0;accent-color:var(--acento);flex-shrink:0}
+  .link{background:none;border:none;padding:0;font:inherit;color:var(--acento);text-decoration:underline;cursor:pointer}
+  .terms{margin:0 24px;background:var(--superficie);border-radius:14px;padding:16px;font-size:13px;line-height:1.5;color:var(--texto-2);max-height:140px;overflow-y:auto}
+  .bottom{margin-top:auto;display:flex;flex-direction:column;gap:12px}
+  .btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:16px;border:none;width:100%;background:var(--acento);color:var(--sobre-acento);font:600 17px Inter,sans-serif;text-decoration:none;cursor:pointer}
+  .btn:disabled{background:var(--borde);color:#8A9BB2;cursor:not-allowed}
+  .swap{text-align:center;font-size:14px;color:var(--texto-2)}
+  .foot{font-size:12px;color:var(--tenue);text-align:center}
+  .center{display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:24px;text-align:center}
+  .icon{width:72px;height:72px;border-radius:999px;display:flex;align-items:center;justify-content:center}
+  .card{background:var(--superficie);border-radius:20px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .label{font-size:13px;color:var(--tenue);text-transform:uppercase;letter-spacing:.08em}
+  .timer{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:56px;font-variant-numeric:tabular-nums}
+  .promo{border:1px dashed var(--borde-punteado);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:8px}
+  .promo .label{color:var(--acento);font-weight:600}
+  .placeholder{height:220px;border-radius:20px;background:var(--superficie);border:1px dashed var(--borde-punteado);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-size:14px;color:var(--tenue)}
+</style>
+</head>
+<body>
+<nav class="demo-bar" aria-label="Pantallas de la demo">
+  <span>Demo:</span>
+  <button type="button" data-go="login" aria-pressed="true">Iniciar sesión</button>
+  <button type="button" data-go="registro" aria-pressed="false">Crear cuenta</button>
+  <button type="button" data-go="conectado" aria-pressed="false">Conectado</button>
+  <button type="button" data-go="lleno" aria-pressed="false">Red llena</button>
+  <span class="demo-note">Demo: no se guarda ningún dato. No ingreses claves reales.</span>
+</nav>
+
+<main class="phone">
+  <!-- 1. Iniciar sesión -->
+  <section class="screen active" id="login" aria-label="Iniciar sesión">
+    <div class="header pad"><span class="logo">LOGO</span><span class="chip">Nombre de evento</span></div>
+    <img class="hero" src="/hero.webp" alt="Personas disfrutando un festival al aire libre">
+    <div class="pad" style="display:flex;flex-direction:column;gap:10px">
+      <h1>Inicia sesión para conectarte</h1>
+      <p class="lead">WiFi gratis, cortesía de [MARCA]. Hasta 15 minutos por sesión.</p>
+    </div>
+    <form class="form" id="formLogin" novalidate>
+      <div class="pad field">
+        <label for="loginUsuario">Correo o usuario</label>
+        <input class="input" id="loginUsuario" name="usuario" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="tu@correo.com">
+        <span class="error" id="errLoginUsuario" role="alert"></span>
+      </div>
+      <div class="pad field">
+        <label for="loginClave">Contraseña</label>
+        <div class="input-wrap">
+          <input class="input has-toggle" id="loginClave" name="clave" type="password" autocomplete="current-password" placeholder="Tu contraseña">
+          <button type="button" class="toggle" data-toggle="loginClave" aria-label="Mostrar contraseña" aria-pressed="false">Mostrar</button>
+        </div>
+        <span class="error" id="errLoginClave" role="alert"></span>
+      </div>
+      <div class="bottom pad">
+        <button type="submit" class="btn">Iniciar sesión</button>
+        <p class="swap">¿No tienes cuenta? <button type="button" class="link" data-go="registro">Regístrate</button></p>
+        <span class="foot">Operado por [PROVEEDOR]</span>
+      </div>
+    </form>
+  </section>
+
+  <!-- 2. Crear cuenta -->
+  <section class="screen" id="registro" aria-label="Crear cuenta">
+    <div class="header pad"><span class="logo">LOGO</span><span class="chip">Nombre de evento</span></div>
+    <div class="pad" style="display:flex;flex-direction:column;gap:10px">
+      <h1 class="h1-sm">Crea tu cuenta</h1>
+      <p class="lead">Regístrate una vez y conéctate cuando quieras durante el evento.</p>
+    </div>
+    <form class="form" id="formRegistro" novalidate>
+      <div class="pad field">
+        <label for="regNombre">Nombre</label>
+        <input class="input" id="regNombre" name="nombre" type="text" autocomplete="name" placeholder="Tu nombre">
+        <span class="error" id="errRegNombre" role="alert"></span>
+      </div>
+      <div class="pad field">
+        <label for="regCorreo">Correo</label>
+        <input class="input" id="regCorreo" name="correo" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" placeholder="tu@correo.com">
+        <span class="error" id="errRegCorreo" role="alert"></span>
+      </div>
+      <div class="pad field">
+        <label for="regClave">Contraseña</label>
+        <div class="input-wrap">
+          <input class="input has-toggle" id="regClave" name="clave" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
+          <button type="button" class="toggle" data-toggle="regClave" aria-label="Mostrar contraseña" aria-pressed="false">Mostrar</button>
+        </div>
+        <span class="error" id="errRegClave" role="alert"></span>
+      </div>
+      <div class="accept pad">
+        <input id="regAcepto" type="checkbox">
+        <p><label for="regAcepto">Acepto los </label><button type="button" class="link" id="verTerminos" aria-expanded="false" aria-controls="terminos">términos y condiciones</button><label for="regAcepto"> de uso de la red.</label></p>
+      </div>
+      <div class="terms" id="terminos" hidden>Servicio gratuito, por un máximo de 15 minutos por sesión y con velocidad limitada. La red tiene cupos: si está llena, espera unos minutos. Es una red pública: evita ingresar datos sensibles. Tus datos de registro se usan solo para darte acceso a la red y, si lo autorizas, para contactarte sobre [MARCA]. Operado por [PROVEEDOR].</div>
+      <div class="bottom pad">
+        <button type="submit" class="btn" id="btnRegistro" disabled>Acepta los términos para continuar</button>
+        <p class="swap">¿Ya tienes cuenta? <button type="button" class="link" data-go="login">Inicia sesión</button></p>
+        <span class="foot">Operado por [PROVEEDOR]</span>
+      </div>
+    </form>
+  </section>
+
+  <!-- 3. Conectado -->
+  <section class="screen" id="conectado" aria-label="Conectado" style="gap:24px">
+    <div class="header pad"><span class="logo">LOGO</span><span class="chip">Nombre de evento</span></div>
+    <div class="center pad">
+      <div class="icon" style="background:var(--acento)"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0E1A2B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h1 class="h1-sm" id="saludo">Ya estás conectado</h1>
+      <p style="font-size:15px;line-height:1.5;color:var(--texto-2)">Disfruta el evento. Tu sesión se cierra sola al terminar el tiempo.</p>
+    </div>
+    <div class="pad"><div class="card"><span class="label">Tiempo restante</span><span class="timer" id="timer" aria-live="off">15:00</span></div></div>
+    <div class="pad"><div class="promo"><span class="label">Solo para conectados</span><p style="font-size:16px;line-height:1.5">Muestra este código en el stand de [MARCA]: [CÓDIGO DE PROMOCIÓN]</p></div></div>
+    <div class="bottom pad">
+      <a class="btn" href="#" id="navegar">Empezar a navegar</a>
+      <span class="foot">Operado por [PROVEEDOR]</span>
+    </div>
+  </section>
+
+  <!-- 4. Red llena -->
+  <section class="screen" id="lleno" aria-label="Red llena" style="gap:24px">
+    <div class="header pad"><span class="logo">LOGO</span><span class="chip">Nombre de evento</span></div>
+    <div class="center pad">
+      <div class="icon" style="background:var(--superficie);border:2px solid var(--aviso)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFB020" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></div>
+      <h1 class="h1-sm">Red llena por ahora</h1>
+      <p style="font-size:15px;line-height:1.5;color:var(--texto-2)">Todos los cupos están en uso. Se liberan cada pocos minutos: vuelve a intentar en un rato.</p>
+    </div>
+    <div class="pad"><div class="placeholder">[Contenido de la marca mientras espera: video, promoción o mapa del evento]</div></div>
+    <div class="bottom pad">
+      <button type="button" class="btn" data-go="login">Intentar de nuevo</button>
+      <span class="foot">Operado por [PROVEEDOR]</span>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var timerEl = $('timer'), saludo = $('saludo');
+  var interval = null;
+
+  function startTimer(){
+    var s = 900;
+    clearInterval(interval);
+    timerEl.textContent = '15:00';
+    interval = setInterval(function(){
+      s = s > 0 ? s - 1 : 0;
+      timerEl.textContent = String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    }, 1000);
+  }
+
+  function go(id){
+    document.querySelectorAll('.screen').forEach(function(el){ el.classList.toggle('active', el.id === id); });
+    document.querySelectorAll('.demo-bar [data-go]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.go === id)); });
+    if (id === 'conectado') startTimer(); else clearInterval(interval);
+    window.scrollTo(0,0);
+  }
+
+  function setError(inputId, errId, msg){
+    var input = $(inputId), err = $(errId);
+    err.textContent = msg || '';
+    if (msg) { input.setAttribute('aria-invalid','true'); input.setAttribute('aria-describedby', errId); }
+    else { input.removeAttribute('aria-invalid'); input.removeAttribute('aria-describedby'); }
+    return !msg;
+  }
+  function firstInvalid(form){ return form.querySelector('[aria-invalid="true"]'); }
+
+  document.querySelectorAll('[data-go]').forEach(function(b){
+    b.addEventListener('click', function(){
+      saludo.textContent = 'Ya estás conectado';
+      go(b.dataset.go);
+    });
+  });
+
+  // Mostrar / ocultar contraseña
+  document.querySelectorAll('[data-toggle]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var input = $(btn.dataset.toggle);
+      var show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      btn.textContent = show ? 'Ocultar' : 'Mostrar';
+      btn.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
+      btn.setAttribute('aria-pressed', String(show));
+    });
+  });
+
+  // Iniciar sesión (simulado: cualquier dato válido entra)
+  var formLogin = $('formLogin');
+  formLogin.addEventListener('submit', function(e){
+    e.preventDefault();
+    var u = $('loginUsuario').value.trim(), c = $('loginClave').value;
+    var ok1 = setError('loginUsuario','errLoginUsuario', u ? '' : 'Escribe tu correo o usuario.');
+    var ok2 = setError('loginClave','errLoginClave', c ? '' : 'Escribe tu contraseña.');
+    if (!(ok1 && ok2)) { firstInvalid(formLogin).focus(); return; }
+    saludo.textContent = 'Ya estás conectado';
+    go('conectado');
+  });
+
+  // Crear cuenta
+  var formRegistro = $('formRegistro');
+  var acepto = $('regAcepto'), btnReg = $('btnRegistro');
+  acepto.addEventListener('change', function(){
+    btnReg.disabled = !acepto.checked;
+    btnReg.textContent = acepto.checked ? 'Crear cuenta y conectarme' : 'Acepta los términos para continuar';
+  });
+  formRegistro.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (btnReg.disabled) return;
+    var n = $('regNombre').value.trim(), m = $('regCorreo').value.trim(), c = $('regClave').value;
+    var ok1 = setError('regNombre','errRegNombre', n ? '' : 'Escribe tu nombre.');
+    var ok2 = setError('regCorreo','errRegCorreo', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(m) ? '' : 'Escribe un correo válido, por ejemplo tu@correo.com.');
+    var ok3 = setError('regClave','errRegClave', c.length >= 8 ? '' : 'La contraseña debe tener al menos 8 caracteres.');
+    if (!(ok1 && ok2 && ok3)) { firstInvalid(formRegistro).focus(); return; }
+    saludo.textContent = 'Hola, ' + n.split(' ')[0] + '. Ya estás conectado';
+    go('conectado');
+  });
+
+  // Limpiar el error de un campo apenas el usuario lo corrige
+  [['loginUsuario','errLoginUsuario'],['loginClave','errLoginClave'],['regNombre','errRegNombre'],['regCorreo','errRegCorreo'],['regClave','errRegClave']].forEach(function(p){
+    $(p[0]).addEventListener('input', function(){ setError(p[0], p[1], ''); });
+  });
+
+  // Términos
+  var ver = $('verTerminos'), terminos = $('terminos');
+  ver.addEventListener('click', function(){
+    var open = terminos.hidden;
+    terminos.hidden = !open;
+    ver.setAttribute('aria-expanded', String(open));
+  });
+  $('navegar').addEventListener('click', function(e){ e.preventDefault(); });
+})();
+</script>
+</body>
+</html>
